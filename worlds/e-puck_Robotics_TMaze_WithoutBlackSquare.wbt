@@ -207,16 +207,16 @@ DEF GA Robot {
       height 150
     }
   ]
-  controller "supervisorGA - CW"
+  controller "<none>"
 }
 E-puck {
-  hidden translation_1 0 0.025999999999999995 0.02
-  hidden rotation_1 0 -1 0 4.7737736527624826
-  hidden translation_2 0 -0.026000000000000006 0.02
-  hidden rotation_2 0 0.9999999999999999 0 2.6225905313356366
-  translation 0.009999999998817228 -6.269267369193518e-05 0.38000000013025426
-  rotation -0.5736983610110671 0.5791405426292717 0.5791946326204067 2.09979869501612
-  controller "epuck_python - CW"
+  hidden position_0_0 -3.095548439802087e-08
+  hidden position_0_1 -3.095547000083397e-08
+  hidden rotation_1 0 -1 0 4.773773683717967
+  hidden rotation_2 0 1 0 2.6225905003801664
+  translation 0.009999999999841983 -6.268251058471133e-05 0.3800000002217842
+  rotation -0.5737167037878074 0.5791583075591683 0.5791586989591481 2.0998533769098944
+  controller "<none>"
   emitter_channel 20
   receiver_channel 19
   groundSensorsSlot [

@@ -51,7 +51,7 @@ DEF GA Robot {
     }
   ]
   name "Supervisor"
-  controller "supervisorGA - CW"
+  controller "<none>"
 }
 DEF OBSTACLE1 Solid {
   translation -0.002842 0.025 -0.432401
@@ -229,13 +229,13 @@ DEF OBSTACLE1 Solid {
   boundingObject USE BOX1
 }
 DEF Controller E-puck {
-  hidden translation_1 0 0.025999999999999992 0.02
-  hidden rotation_1 0 -1 0 4.773773683717902
-  hidden translation_2 0 -0.026 0.02
-  hidden rotation_2 0 0.9999999999999999 0 2.62259050038016
-  translation 0.00999999999984175 -6.268251058512246e-05 0.3800000002217842
-  rotation -0.5737167037878087 0.5791583075591769 0.5791586989591385 2.099853376909903
-  controller "epuck_python - CW"
+  hidden position_0_0 3.095552356791997e-08
+  hidden position_0_1 3.095556023751454e-08
+  hidden rotation_1 0 -1 0 4.773773652762379
+  hidden rotation_2 0 0.9999999999999999 0 2.62259053133572
+  translation 0.009999999998944811 -6.268249513697102e-05 0.380000000109658
+  rotation -0.5737192278658176 0.5791607843040558 0.5791537218229378 2.0998609019935275
+  controller "<none>"
   emitter_channel 20
   receiver_channel 19
   groundSensorsSlot [
