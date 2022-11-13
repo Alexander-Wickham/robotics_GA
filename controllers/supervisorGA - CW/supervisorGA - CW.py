@@ -114,6 +114,10 @@ class SupervisorGA:
         # Measure fitness
         fitness = self.receivedFitness
         print("Fitness: {}".format(fitness))
+        
+        # Check for Reward and add to the fitness value here
+        # ?
+        
         current = (generation,genotype,fitness)
         self.genotypes.append(current)  
         
