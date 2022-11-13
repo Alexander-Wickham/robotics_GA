@@ -131,14 +131,10 @@ class Controller:
         self.right_motor.setVelocity(self.velocity_right*3)
 
     def calculate_fitness(self):
-        
         ### Define the fitness function to increase the speed of the robot and 
-        ### to encourage the robot to move forward only
+        ### to encourage the robot to move forward
         forwardFitness = ?
-        
-        ### Define the fitness function to encourage the robot to follow the line
-        followLineFitness = ?
-                
+                      
         ### Define the fitness function to avoid collision
         avoidCollisionFitness = ?
         
