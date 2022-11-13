@@ -101,6 +101,7 @@ class SupervisorGA:
         self.emitterData = str(genotype)
         
         # Reset robot position and physics
+        # YOU MAY NEED TO ADJUST THE ROBOT INITIAL POSITION AND ORIENTATION HERE <<<<<<<<<<<<<<<<
         INITIAL_TRANS = [4.48, 0, 7.63]
         self.trans_field.setSFVec3f(INITIAL_TRANS)
         INITIAL_ROT = [0, 1, 0, -0.0]
