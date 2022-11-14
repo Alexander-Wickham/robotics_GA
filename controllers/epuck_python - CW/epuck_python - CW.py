@@ -19,7 +19,7 @@ class Controller:
         self.number_input_layer = ?
         # Example with one hidden layers: self.number_hidden_layer = [5]
         # Example with two hidden layers: self.number_hidden_layer = [7,5]
-        self.number_hidden_layer = [?] 
+        self.number_hidden_layer = [?,..,?] 
         self.number_output_layer = ?
         
         # Create a list with the number of neurons per layer
@@ -229,7 +229,7 @@ class Controller:
                     temp = self.proximity_sensors[i].getValue()
                     
                     ### Please adjust the distance sensors values to facilitate learning 
-                    min_ds = ? 
+                    min_ds = ?
                     max_ds = ?
                     
                     if(temp > max_ds): temp = max_ds

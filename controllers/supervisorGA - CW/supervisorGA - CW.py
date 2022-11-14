@@ -2,8 +2,8 @@ from controller import Supervisor
 from controller import Keyboard
 from controller import Display
 
-import numpy,struct
-import ga,os
+import numpy as np
+import ga,os,sys,struct
 
 class SupervisorGA:
     def __init__(self):
@@ -56,6 +56,13 @@ class SupervisorGA:
         self.prev_average_fitness = 0.0;
         self.display.drawText("Fitness (Best - Red)", 0,0)
         self.display.drawText("Fitness (Average - Green)", 0,10)
+        
+        # Black mark
+        self.mark_node = self.supervisor.getFromDef("Mark")
+        if self.mark_node is None:
+            sys.stderr.write("No DEF Mark node found in the current world file\n")
+            sys.exit(1)
+        self.mark_trans_field = self.mark_node.getField("translation")      
 
     def createRandomPopulation(self):
         # Wait until the supervisor receives the size of the genotypes (number of weights)
@@ -63,7 +70,7 @@ class SupervisorGA:
             # Define the size of the population
             pop_size = (self.num_population,self.num_weights)
             # Create the initial population with random weights
-            self.population = numpy.random.uniform(low=-1.0, high=1.0, size=pop_size)
+            self.population = np.random.uniform(low=-1.0, high=1.0, size=pop_size)
 
     def handle_receiver(self):
         while(self.receiver.getQueueLength() > 0):
@@ -97,27 +104,72 @@ class SupervisorGA:
             iterations = iterations + 1
                 
     def evaluate_genotype(self,genotype,generation):
-        # Send genotype to robot for evaluation
-        self.emitterData = str(genotype)
+        numberTrials = 3
+        currentTrial = 0
+        fitnessPerTrial = []
+        while currentTrial < numberTrials:
+            #######################################
+            # TRIAL: TURN RIGHT
+            #######################################
+            # Send genotype to robot for evaluation
+            self.emitterData = str(genotype)
+            
+            # Reset robot position and physics
+            INITIAL_TRANS = [0.007, 0, 0.35]
+            self.trans_field.setSFVec3f(INITIAL_TRANS)
+            INITIAL_ROT = [-0.5, 0.5, 0.5, 2.09]
+            self.rot_field.setSFRotation(INITIAL_ROT)
+            self.robot_node.resetPhysics()
+            
+            # Reset the black mark position and physics
+            INITIAL_TRANS = [0.01, -0.03425, 0.193]
+            self.mark_trans_field.setSFVec3f(INITIAL_TRANS)
+            self.mark_node.resetPhysics()
         
-        # Reset robot position and physics
-        # YOU MAY NEED TO ADJUST THE ROBOT INITIAL POSITION AND ORIENTATION HERE <<<<<<<<<<<<<<<<
-        INITIAL_TRANS = [4.48, 0, 7.63]
-        self.trans_field.setSFVec3f(INITIAL_TRANS)
-        INITIAL_ROT = [0, 1, 0, -0.0]
-        self.rot_field.setSFRotation(INITIAL_ROT)
-        self.robot_node.resetPhysics()
-    
-        # Evaluation genotype 
-        self.run_seconds(self.time_experiment)
-    
-        # Measure fitness
-        fitness = self.receivedFitness
-        print("Fitness: {}".format(fitness))
+            # Evaluation genotype 
+            self.run_seconds(self.time_experiment)
         
-        # Check for Reward and add it to the fitness value here
-        # ?
+            # Measure fitness
+            fitness = self.receivedFitness
+            print("Fitness: {}".format(fitness))
+            
+            # Check for Reward and add it to the fitness value here
+            # ADD CODE HERE
+            
+            #######################################
+            # TRIAL: TURN LEFT
+            #######################################
+            # Send genotype to robot for evaluation
+            self.emitterData = str(genotype)
+            
+            # Reset robot position and physics
+            INITIAL_TRANS = [0.007, 0, 0.35]
+            self.trans_field.setSFVec3f(INITIAL_TRANS)
+            INITIAL_ROT = [-0.5, 0.5, 0.5, 2.09]
+            self.rot_field.setSFRotation(INITIAL_ROT)
+            self.robot_node.resetPhysics()
+            
+            # Reset the black mark position and physics
+            INITIAL_TRANS = [0.01, -0.1, 0.193]
+            self.mark_trans_field.setSFVec3f(INITIAL_TRANS)
+            self.mark_node.resetPhysics()
         
+            # Evaluation genotype 
+            self.run_seconds(self.time_experiment)
+        
+            # Measure fitness
+            fitness = self.receivedFitness
+            print("Fitness: {}".format(fitness))
+            
+            # Check for Reward and add it to the fitness value here
+            # ADD CODE HERE
+            
+            fitnessPerTrial.append(fitness)
+            currentTrial += 1
+            
+        print(fitnessPerTrial)    
+        
+        fitness = np.mean(fitnessPerTrial)
         current = (generation,genotype,fitness)
         self.genotypes.append(current)  
         
@@ -125,15 +177,15 @@ class SupervisorGA:
 
     def run_demo(self):
         # Read File
-        genotype = numpy.load("Best.npy")
+        genotype = np.load("Best.npy")
         # Send Genotype to controller
         self.emitterData = str(genotype) 
         
         # Reset robot position and physics
         # YOU MAY NEED TO ADJUST THE ROBOT INITIAL POSITION AND ORIENTATION HERE <<<<<<<<<<<<<<<<
-        INITIAL_TRANS = [4.48, 0, 7.63]
+        INITIAL_TRANS = [0.007, 0, 0.35]
         self.trans_field.setSFVec3f(INITIAL_TRANS)
-        INITIAL_ROT = [0, 1, 0, -0.0]
+        INITIAL_ROT = [-0.5, 0.5, 0.5, 2.09]
         self.rot_field.setSFRotation(INITIAL_ROT)
         self.robot_node.resetPhysics()
     
@@ -166,7 +218,7 @@ class SupervisorGA:
             # Save genotype of the best individual
             best = ga.getBestGenotype(current_population);
             average = ga.getAverageGenotype(current_population);
-            numpy.save("Best.npy",best[0])
+            np.save("Best.npy",best[0])
             self.plot_fitness(generation, best[1], average);
             
             # Generate the new population using genetic operators
