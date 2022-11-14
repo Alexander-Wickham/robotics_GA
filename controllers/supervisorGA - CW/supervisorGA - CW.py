@@ -104,10 +104,12 @@ class SupervisorGA:
             iterations = iterations + 1
                 
     def evaluate_genotype(self,genotype,generation):
-        numberTrials = 3
-        currentTrial = 0
+        # Here you can choose how many times the current individual will interact with both environments
+        # At each interaction loop, one trial on each environment will be performed
+        numberofInteractionLoops = 3
+        currentInteraction = 0
         fitnessPerTrial = []
-        while currentTrial < numberTrials:
+        while currentInteraction < numberofInteractionLoops:
             #######################################
             # TRIAL: TURN RIGHT
             #######################################
@@ -135,6 +137,9 @@ class SupervisorGA:
             
             # Check for Reward and add it to the fitness value here
             # ADD CODE HERE
+            
+            # Add fitness value to the vector
+            fitnessPerTrial.append(fitness)
             
             #######################################
             # TRIAL: TURN LEFT
@@ -164,8 +169,11 @@ class SupervisorGA:
             # Check for Reward and add it to the fitness value here
             # ADD CODE HERE
             
+            # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
-            currentTrial += 1
+            
+            # End 
+            currentInteraction += 1
             
         print(fitnessPerTrial)    
         
