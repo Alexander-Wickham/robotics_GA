@@ -22,7 +22,7 @@ TexturedBackground {
 }
 TexturedBackgroundLight {
 }
-DEF Controller RectangleArena {
+RectangleArena {
   rotation 1 0 0 -1.5707996938995747
   floorSize 0.9 0.9
   floorTileSize 0.9 0.9
@@ -209,13 +209,13 @@ DEF GA Robot {
   ]
   controller "<none>"
 }
-E-puck {
-  hidden position_0_0 -3.095548439802087e-08
-  hidden position_0_1 -3.095547000083397e-08
-  hidden rotation_1 0 -1 0 4.773773683717967
-  hidden rotation_2 0 1 0 2.6225905003801664
-  translation 0.009999999999841983 -6.268251058471133e-05 0.3800000002217842
-  rotation -0.5737167037878074 0.5791583075591683 0.5791586989591481 2.0998533769098944
+DEF Controller E-puck {
+  hidden position_0_0 3.0135105649090356e-14
+  hidden position_0_1 3.4134920666310694e-14
+  hidden rotation_1 0 -1 0 4.773773652762452
+  hidden rotation_2 0 1 0 2.6225905313356703
+  translation 0.009999999998944516 -6.268249513654775e-05 0.38000000010965806
+  rotation -0.573719227865824 0.5791607843040574 0.57915372182293 2.099860901993536
   controller "<none>"
   emitter_channel 20
   receiver_channel 19
