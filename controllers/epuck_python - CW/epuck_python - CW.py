@@ -140,7 +140,7 @@ class Controller:
         
         ### Define the fitness function to avoid spining behaviour
         spinningFitness = ?
-         
+        
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
         combinedFitness = ?
         

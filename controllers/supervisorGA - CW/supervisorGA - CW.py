@@ -133,11 +133,12 @@ class SupervisorGA:
         
             # Measure fitness
             fitness = self.receivedFitness
-            print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
-            # ADD CODE HERE
+            # Add your code here
             
+            print("Fitness: {}".format(fitness))     
+                        
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
             
@@ -164,10 +165,11 @@ class SupervisorGA:
         
             # Measure fitness
             fitness = self.receivedFitness
-            print("Fitness: {}".format(fitness))
             
             # Check for Reward and add it to the fitness value here
-            # ADD CODE HERE
+            # Add your code here
+            
+            print("Fitness: {}".format(fitness))
             
             # Add fitness value to the vector
             fitnessPerTrial.append(fitness)
@@ -186,19 +188,54 @@ class SupervisorGA:
     def run_demo(self):
         # Read File
         genotype = np.load("Best.npy")
+        
+        # Turn Left
+        
         # Send Genotype to controller
         self.emitterData = str(genotype) 
         
         # Reset robot position and physics
-        # YOU MAY NEED TO ADJUST THE ROBOT INITIAL POSITION AND ORIENTATION HERE <<<<<<<<<<<<<<<<
         INITIAL_TRANS = [0.007, 0, 0.35]
         self.trans_field.setSFVec3f(INITIAL_TRANS)
         INITIAL_ROT = [-0.5, 0.5, 0.5, 2.09]
         self.rot_field.setSFRotation(INITIAL_ROT)
         self.robot_node.resetPhysics()
+        
+        # Reset the black mark position and physics
+        INITIAL_TRANS = [0.01, -0.1, 0.193]
+        self.mark_trans_field.setSFVec3f(INITIAL_TRANS)
+        self.mark_node.resetPhysics()
     
         # Evaluation genotype 
-        self.run_seconds(self.time_experiment)    
+        self.run_seconds(self.time_experiment) 
+        
+        # Measure fitness
+        fitness = self.receivedFitness
+        print("Fitness without reward or penalty: {}".format(fitness))
+        
+        # Turn Right
+        
+        # Send Genotype to controller
+        self.emitterData = str(genotype) 
+        
+        # Reset robot position and physics
+        INITIAL_TRANS = [0.007, 0, 0.35]
+        self.trans_field.setSFVec3f(INITIAL_TRANS)
+        INITIAL_ROT = [-0.5, 0.5, 0.5, 2.09]
+        self.rot_field.setSFRotation(INITIAL_ROT)
+        self.robot_node.resetPhysics()
+        
+        # Reset the black mark position and physics
+        INITIAL_TRANS = [0.01, -0.03425, 0.193]
+        self.mark_trans_field.setSFVec3f(INITIAL_TRANS)
+        self.mark_node.resetPhysics()
+    
+        # Evaluation genotype 
+        self.run_seconds(self.time_experiment)  
+        
+        # Measure fitness
+        fitness = self.receivedFitness
+        print("Fitness without reward or penalty: {}".format(fitness))    
     
     def run_optimization(self):
         # Wait until the number of weights is updated
