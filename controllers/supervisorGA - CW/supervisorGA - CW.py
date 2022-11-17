@@ -35,9 +35,9 @@ class SupervisorGA:
         self.emitterData = ""
         
         ### Define here the GA Parameters
-        self.num_generations = ?
-        self.num_population = ?
-        self.num_elite = ?
+        self.num_generations = 10
+        self.num_population = 10
+        self.num_elite = 2
         
         # size of the genotype variable
         self.num_weights = 0
@@ -52,8 +52,8 @@ class SupervisorGA:
         self.display = self.supervisor.getDevice("display")
         self.width = self.display.getWidth()
         self.height = self.display.getHeight()
-        self.prev_best_fitness = 0.0;
-        self.prev_average_fitness = 0.0;
+        self.prev_best_fitness = 0.0
+        self.prev_average_fitness = 0.0
         self.display.drawText("Fitness (Best - Red)", 0,0)
         self.display.drawText("Fitness (Average - Green)", 0,10)
         
@@ -136,6 +136,17 @@ class SupervisorGA:
             
             # Check for Reward and add it to the fitness value here
             # Add your code here
+
+            curr_pos = self.robot_node.getField("translation")
+            curr_trans = curr_pos.getSFVec3f()
+            # print(curr_trans)
+
+            if (curr_trans[0] > 0.1) and (curr_trans[2] < -0.1):
+                fitness += 10
+            elif (curr_trans[0] < -0.1) and (curr_trans[2] < -0.1):
+                fitness -= 100
+
+            # fitness
             
             print("Fitness: {}".format(fitness))     
                         
@@ -168,7 +179,16 @@ class SupervisorGA:
             
             # Check for Reward and add it to the fitness value here
             # Add your code here
-            
+
+            curr_pos = self.robot_node.getField("translation")
+            curr_trans = curr_pos.getSFVec3f()
+
+            if (curr_trans[0] < -0.1) and (curr_trans[2] < -0.1):
+                fitness += 10
+            elif (curr_trans[0] > 0.1) and (curr_trans[2] < -0.1):
+                fitness -= 100
+
+
             print("Fitness: {}".format(fitness))
             
             # Add fitness value to the vector
@@ -255,20 +275,20 @@ class SupervisorGA:
                 # Evaluate
                 fitness = self.evaluate_genotype(genotype,generation)
                 #print(fitness)
-                # Save its fitness value
+                # Save its fitness valuegeneration
                 current_population.append((genotype,float(fitness)))
                 #print(current_population)
                 
             # After checking the fitness value of all indivuals
             # Save genotype of the best individual
-            best = ga.getBestGenotype(current_population);
-            average = ga.getAverageGenotype(current_population);
+            best = ga.getBestGenotype(current_population)
+            average = ga.getAverageGenotype(current_population)
             np.save("Best.npy",best[0])
-            self.plot_fitness(generation, best[1], average);
+            self.plot_fitness(generation, best[1], average)
             
             # Generate the new population using genetic operators
             if (generation < self.num_generations - 1):
-                self.population = ga.population_reproduce(current_population,self.num_elite);
+                self.population = ga.population_reproduce(current_population,self.num_elite)
         
         #print("All Genotypes: {}".format(self.genotypes))
         print("GA optimization terminated.\n")   
@@ -276,20 +296,20 @@ class SupervisorGA:
     
     def draw_scaled_line(self, generation, y1, y2): 
         # Define the scale of the fitness plot
-        XSCALE = int(self.width/self.num_generations);
-        YSCALE = 100;
-        self.display.drawLine((generation-1)*XSCALE, self.height-int(y1*YSCALE), generation*XSCALE, self.height-int(y2*YSCALE));
+        XSCALE = int(self.width/self.num_generations)
+        YSCALE = 100
+        self.display.drawLine((generation-1)*XSCALE, self.height-int(y1*YSCALE), generation*XSCALE, self.height-int(y2*YSCALE))
     
     def plot_fitness(self, generation, best_fitness, average_fitness):
         if (generation > 0):
-            self.display.setColor(0xff0000);  # red
-            self.draw_scaled_line(generation, self.prev_best_fitness, best_fitness);
+            self.display.setColor(0xff0000)  # red
+            self.draw_scaled_line(generation, self.prev_best_fitness, best_fitness)
     
-            self.display.setColor(0x00ff00);  # green
-            self.draw_scaled_line(generation, self.prev_average_fitness, average_fitness);
+            self.display.setColor(0x00ff00)  # green
+            self.draw_scaled_line(generation, self.prev_average_fitness, average_fitness)
     
-        self.prev_best_fitness = best_fitness;
-        self.prev_average_fitness = average_fitness;
+        self.prev_best_fitness = best_fitness
+        self.prev_average_fitness = average_fitness
   
     
 if __name__ == "__main__":

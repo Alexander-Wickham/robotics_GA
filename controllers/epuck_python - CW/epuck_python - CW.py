@@ -16,11 +16,11 @@ class Controller:
         ### Add the number of neurons for each layer.
         ### The number of neurons should be in between of 1 to 20.
         ### Number of hidden layers should be one or two.
-        self.number_input_layer = ?
+        self.number_input_layer = 11
         # Example with one hidden layers: self.number_hidden_layer = [5]
         # Example with two hidden layers: self.number_hidden_layer = [7,5]
-        self.number_hidden_layer = [?,..,?] 
-        self.number_output_layer = ?
+        self.number_hidden_layer = [8, 8] 
+        self.number_output_layer = 2
         
         # Create a list with the number of neurons per layer
         self.number_neuros_per_layer = []
@@ -113,10 +113,10 @@ class Controller:
         
     def clip_value(self,value,min_max):
         if (value > min_max):
-            return min_max;
+            return min_max
         elif (value < -min_max):
-            return -min_max;
-        return value;
+            return -min_max
+        return value
 
     def sense_compute_and_actuate(self):
         # MLP: 
@@ -133,16 +133,34 @@ class Controller:
     def calculate_fitness(self):
         ### Define the fitness function to increase the speed of the robot and 
         ### to encourage the robot to move forward
-        forwardFitness = ?
-                      
+        forwardFitness = 0 # ?
+        if (self.left_motor.getVelocity() > 0) and (self.right_motor.getVelocity() > 0):
+            forwardFitness += 0.1
+        elif (self.left_motor.getVelocity() < 0) and (self.right_motor.getVelocity() < 0):
+            forwardFitness -= 1
+
         ### Define the fitness function to avoid collision
-        avoidCollisionFitness = ?
+        avoidCollisionFitness = 0 # ?
+        # print(self.inputs[3:])
+        for v in self.inputs[3:]:
+            if v < 0.03:
+                # print("touching wall")
+                avoidCollisionFitness -= 1
+            # else:
+            #     avoidCollisionFitness += 0.001
         
         ### Define the fitness function to avoid spining behaviour
-        spinningFitness = ?
+        spinningFitness = 0 # ?
+
+        # print(self.left_motor.getVelocity(), self.right_motor.getVelocity())
+        if (self.left_motor.getVelocity() > 0) == (self.right_motor.getVelocity() < 0):
+            spinningFitness -= 1
+        else:
+            spinningFitness += 0.1
+ 
         
         ### Define the fitness function of this iteration which should be a combination of the previous functions         
-        combinedFitness = ?
+        combinedFitness = forwardFitness + avoidCollisionFitness + spinningFitness # ?
         
         self.fitness_values.append(combinedFitness)
         self.fitness = np.mean(self.fitness_values) 
@@ -206,8 +224,8 @@ class Controller:
             #print("Ground Sensors \n    left {} center {} right {}".format(left,center,right))
                         
             ### Please adjust the ground sensors values to facilitate learning 
-            min_gs = ?
-            max_gs = ?
+            min_gs = 0
+            max_gs = 1000
             
             if(left > max_gs): left = max_gs
             if(center > max_gs): center = max_gs
@@ -229,8 +247,8 @@ class Controller:
                     temp = self.proximity_sensors[i].getValue()
                     
                     ### Please adjust the distance sensors values to facilitate learning 
-                    min_ds = ?
-                    max_ds = ?
+                    min_ds = 0
+                    max_ds = 4096
                     
                     if(temp > max_ds): temp = max_ds
                     if(temp < min_ds): temp = min_ds
@@ -250,6 +268,7 @@ class Controller:
             # End of the iteration 
             
 if __name__ == "__main__":
+    print('a')
     # Call Robot function to initialize the robot
     my_robot = Robot()
     # Initialize the parameters of the controller by sending my_robot
